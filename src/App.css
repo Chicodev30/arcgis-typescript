@@ -1,42 +1,42 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.viewDiv{
+  height: 100vh; /* Subtrai a altura do cabeçalho da altura total da viewport. */
+  width: 100%;
+  overflow: auto; /* Adiciona rolagem apenas se o conteúdo exceder a altura. */
+}
+
+.cabecalho {
+  display: flex;
+  justify-content: space-between; /* Adiciona distribuição de espaço */
+  background-color: #13626D;
+  height: 50px;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  align-items: center;
+  padding: 0 20px; /* Adiciona padding igual em ambos os lados */
+}
+
+.custom-heading {
+  font-size: 19px;
+  font-weight: bold;
   text-align: center;
+  margin: 0;
+  /* Add any other custom styles */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Remover todo o estilo padrão do link com o ID 'procempa-titulo' */
+#procempa-titulo {
+  text-decoration: none; /* Remove o sublinhado do link */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+/* Estilo do parágrafo dentro do link para parecer 'secreto' */
+#procempa-titulo p {
+  color: white; /* Cor do texto branco */
+  font-style: italic; /* Fonte itálica */
 }

@@ -1,35 +1,127 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { useEffect, useRef, useState } from "react";
+import "@esri/calcite-components/dist/components/calcite-action-bar";
+import "@esri/calcite-components/dist/components/calcite-action";
+import "@esri/calcite-components/dist/components/calcite-shell";
+import "@esri/calcite-components/dist/components/calcite-shell-panel";
+import "@esri/calcite-components/dist/components/calcite-panel";
+import "@esri/calcite-components/dist/components/calcite-tooltip"
+import "@esri/calcite-components/dist/components/calcite-block"
+import "@esri/calcite-components/dist/components/calcite-input"
+import "@esri/calcite-components/dist/components/calcite-label"
+import "@esri/calcite-components/dist/components/calcite-select"
+import "@esri/calcite-components/dist/components/calcite-option"
+import "@esri/calcite-components/dist/components/calcite-input-number"
+import "@esri/calcite-components/dist/components/calcite-input-date-picker"
+import "@esri/calcite-components/dist/components/calcite-popover"
+
+
+import {
+  CalciteShell,
+  CalciteShellPanel,
+  CalciteActionBar,
+  CalciteAction,
+  CalcitePopover,
+  CalcitePanel,
+} from "@esri/calcite-components-react";
+
+import {ArcMapView,
+    ArcMapImageLayer,
+  } from './libs/ArcGIS - ReactKit';
+
+import ImageLayerData from "./libs/data/ImageLayerData.ts"
+import ImageLayerData2 from "./libs/data/ImageLayerData2.ts"
+import ImageLayerData3 from "./libs/data/ImageLayerData3.ts"
+
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import Procurar from "./libs/procurar";
+import Guia from "./libs/guia";
+
+
+const App = () => {
+  const shellPanelStartRef = useRef<HTMLCalciteShellPanelElement>(null);
+  const [activePanel, setActivePanel] = useState<string | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  const togglePanel = (panelName: string) => {
+    setActivePanel(prevActivePanel => {
+      if (prevActivePanel === panelName) {
+        setIsCollapsed(true);
+        return null;
+      } else {
+        setIsCollapsed(false);
+        return panelName;
+      }
+    });
+  };
+
+  const [isActionBarExpanded, setIsActionBarExpanded] = useState(true);
+  
+  useEffect(() => {
+    const shellPanelStart = shellPanelStartRef.current;
+    const actions = shellPanelStart?.querySelectorAll("calcite-action");
+    
+
+    actions?.forEach(action => {
+      const panelName = action.getAttribute('text')?.toLowerCase() || '';
+      action.addEventListener("click", () => togglePanel(panelName));
+    });
+
+    return () => {
+      actions?.forEach(action => {
+        const panelName = action.getAttribute('text')?.toLowerCase() || '';
+        action.removeEventListener("click", () => togglePanel(panelName));
+      });
+    };
+  }, []);
+
+  const isPanelActive = (panelName: string) => activePanel === panelName;
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <CalciteShell>
+      <CalciteShellPanel slot="panel-start" position="start" ref={shellPanelStartRef} collapsed={isCollapsed}>
+      <CalciteActionBar
+  slot="action-bar"
+  expanded={isActionBarExpanded}
+  onMouseEnter={() => setIsActionBarExpanded(true)}
+  onMouseLeave={() => setIsActionBarExpanded(false)}
+>
+          <CalciteAction icon="home" text="home"></CalciteAction>
+          <CalciteAction icon="search" text="procurar" onClick={() => togglePanel('procurar')}></CalciteAction>
+          <CalciteAction icon="question" text="question" id="question"></CalciteAction>
+          <CalciteAction icon="sign-out" text="sign-out"></CalciteAction>
+  <CalcitePopover
+    heading="Guia de uso"
+    label="Guia de uso"
+    referenceElement="question"
+    id="question"
+    closable
+    overlayPositioning="absolute"
+  >
+    <Guia />
+  </CalcitePopover>
+        </CalciteActionBar>
+
+        {isPanelActive('procurar') && (
+          <Procurar />
+        )}
+
+      </CalciteShellPanel>
+      <CalcitePanel>
+        <div className="cabecalho">
+        OSPOA
+        <a href="https://prefeitura.poa.br/procempa" target="_blank" id="procempa-titulo"><p>Procempa</p></a>
+        <a href="https://prefeitura.poa.br/" target="_blank"><img src="/brasao-pmpa.png" alt="Brasao de POA" /></a>
+        </div>
+      <ArcMapView>
+        < ArcMapImageLayer url={ImageLayerData.url}/>
+        < ArcMapImageLayer url={ImageLayerData2.url}/>
+        < ArcMapImageLayer url={ImageLayerData3.url}/>
+      </ArcMapView>
+      </CalcitePanel>
+    </CalciteShell>
+  );
 }
 
-export default App
+export default App;
+//<DropdownSelector defaultvalue="Selecione uma camada" options={basemaps}/>

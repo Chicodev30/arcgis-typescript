@@ -1,0 +1,40 @@
+#tabs {
+    overflow: hidden;
+}
+
+#tabs menu {
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+#tabs button {
+    font: inherit;
+    font-size: 0.85rem;
+    background-color: #fff;
+    border: 1px solid #000;
+    color: #000;
+    border-radius: 4px 4px 0 0;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+}
+
+#tabs button:hover{
+    background-color: #e2e1e1;
+}
+#tabs button.active {
+    color: #273133;
+    border-bottom: none;
+}
+
+#tab-content {
+    background-color: #fff;
+    border-radius: 0 4px 4px 4px;
+    padding: 1rem;
+    min-width: 355px;
+}
+
+#tab-content li {
+    margin: 0.75rem 0;
+}
