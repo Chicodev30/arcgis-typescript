@@ -16,7 +16,6 @@ import "./ArcMapView.css";
 interface IArcMapViewProps {
   children?: React.ReactNode;
   mapProperties?: __esri.MapProperties;
-  imageLayerUrl?: string;
 }
 
 export const ArcMapView = (props: IArcMapViewProps) => {

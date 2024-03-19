@@ -26,12 +26,14 @@ import {
 
 import {ArcMapView,
     ArcMapImageLayer,
+    ArcFeatureLayer
   } from './libs/ArcGIS - ReactKit';
 
-import ImageLayerData from "./libs/data/ImageLayerData.ts"
-import ImageLayerData2 from "./libs/data/ImageLayerData2.ts"
-import ImageLayerData3 from "./libs/data/ImageLayerData3.ts"
+//import ImageLayerData from "./libs/data/ImageLayerData.ts"
+//import ImageLayerData2 from "./libs/data/ImageLayerData2.ts"
+//import ImageLayerData3 from "./libs/data/ImageLayerData3.ts"
 
+import FeatureLayer1 from "./libs/data/FeatureLayers/FeatureLayer1.ts"
 import './App.css'
 
 import Procurar from "./libs/procurar";
@@ -114,14 +116,14 @@ const App = () => {
         <a href="https://prefeitura.poa.br/" target="_blank"><img src="/brasao-pmpa.png" alt="Brasao de POA" /></a>
         </div>
       <ArcMapView>
-        < ArcMapImageLayer url={ImageLayerData.url}/>
-        < ArcMapImageLayer url={ImageLayerData2.url}/>
-        < ArcMapImageLayer url={ImageLayerData3.url}/>
+        < ArcFeatureLayer url = {FeatureLayer1.url} popupTemplate={FeatureLayer1.popupTemplate}/>
       </ArcMapView>
       </CalcitePanel>
     </CalciteShell>
   );
 }
-
 export default App;
 //<DropdownSelector defaultvalue="Selecione uma camada" options={basemaps}/>
+//< ArcMapImageLayer url={ImageLayerData2.url}/>
+//< ArcMapImageLayer url={ImageLayerData3.url}/>
+ //< ArcMapImageLayer url={ImageLayerData.url} imageMaxHeight={ImageLayerData.imageMaxHeight} imageMaxWidth={ImageLayerData.imageMaxWidth}/>

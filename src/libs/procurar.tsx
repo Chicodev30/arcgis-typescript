@@ -7,7 +7,8 @@ import "@esri/calcite-components/dist/components/calcite-option"
 import "@esri/calcite-components/dist/components/calcite-input-number"
 import "@esri/calcite-components/dist/components/calcite-input-date-picker"
 
-
+import { MapViewContext } from "./ArcGIS - ReactKit/ArcGis - Components/Contexts";
+import FeatureLayer1 from "../libs/data/FeatureLayers/FeatureLayer1"
 
 import {
   CalcitePanel,
@@ -19,10 +20,43 @@ import {
   CalciteInputNumber,
   CalciteInputDatePicker,
 } from "@esri/calcite-components-react";
+import { useEffect,useContext,useState } from "react";
+import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
+import featureLayer1 from "../libs/data/FeatureLayers/FeatureLayer1";
 
 
 const Procurar = () => {
+  const { view } = useContext(MapViewContext);
+  const [NRPROTOCOLO, setNRPROTOCOLO] = useState("");
+
+  const handleProtocoloChange = (event:any) => {
+    setNRPROTOCOLO(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    if (!view || !NRPROTOCOLO) return;
+
+    const featureLayer = new FeatureLayer({
+      url: featureLayer1.url, // Usa a URL da camada importada
+      popupTemplate: featureLayer1.popupTemplate, // Usa o template de popup definido
+    });
+
+    const query = featureLayer.createQuery();
+    query.where = `NRPROTOCOLO = '${NRPROTOCOLO}'`; // Usa o nome correto do campo na consulta
+    query.returnGeometry = true;
+    query.outFields = ["*"]; // Ajuste conforme necessário
+
+    try {
+      const results = await featureLayer.queryFeatures(query);
+      console.log(results.fields);
+      // Processa e exibe os resultados como necessário
+    } catch (error) {
+      console.error("Erro ao realizar a consulta:", error);
+    }
+  };
+
     return (
+
         <CalcitePanel>
             <CalciteBlock open heading={""}>
             <h3 className="custom-heading">Procurar</h3>
@@ -35,8 +69,8 @@ const Procurar = () => {
                 </CalciteSelect>
               </CalciteLabel>
               <CalciteLabel> Protocolo:
-                <CalciteInput placeholder="Ex: 316632-15-84" pattern="[0-9-]{10}" input-mode="number"></CalciteInput>
-              </CalciteLabel>
+            < CalciteInput placeholder="Ex: 316632-15-84" input-mode="text" onInput={handleProtocoloChange}></CalciteInput>
+          </CalciteLabel>
               <CalciteLabel> Código da OS:
                 <CalciteInput placeholder="" pattern="" input-mode="number"></CalciteInput>
               </CalciteLabel>
@@ -66,6 +100,7 @@ const Procurar = () => {
               <CalciteLabel> Último despacho até:
               <CalciteInputDatePicker scale="s"></CalciteInputDatePicker>
               </CalciteLabel>
+              <button onClick={handleSubmit}>Procurar</button>
             </CalciteBlock>
           </CalcitePanel>
     )

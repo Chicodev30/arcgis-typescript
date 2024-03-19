@@ -3,12 +3,13 @@ import MapImageLayer from "@arcgis/core/layers/MapImageLayer";
 import { MapImageLayerContext, MapViewContext } from "../Contexts";
 
 interface IArcMapImageLayerProps {
-  url: string; // URL do MapImageLayer
-  children?: React.ReactNode;
+  url: string,// URL do MapImageLayer
+  imageMaxHeight?: number,
+  imageMaxWidth?: number 
 }
 
 export const ArcMapImageLayer = (props: IArcMapImageLayerProps) => {
-  const { url, children } = props;
+  const { url,imageMaxHeight, imageMaxWidth } = props;
   const { view } = useContext(MapViewContext);
   const [mapImageLayer] = useState<MapImageLayer | null>(null);
 
@@ -16,6 +17,8 @@ export const ArcMapImageLayer = (props: IArcMapImageLayerProps) => {
     // Cria a instância da MapImageLayer
     const layer = new MapImageLayer({
       url: url,
+      imageMaxHeight,
+      imageMaxWidth
     });
   
     // Adiciona a camada ao mapa, se ainda não estiver presente
@@ -30,14 +33,13 @@ export const ArcMapImageLayer = (props: IArcMapImageLayerProps) => {
         view.map.remove(layer);
       }
     };
-  }, [url, view]);
+  }, [url,view]);
 
 
   return (
     <>
       {mapImageLayer && (
-        <MapImageLayerContext.Provider value={{ mapImageLayer }}>
-          {children}
+        <MapImageLayerContext.Provider value={{ mapImageLayer }} >
         </MapImageLayerContext.Provider>
       )}
     </>
